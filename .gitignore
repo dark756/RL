@@ -1,0 +1,5 @@
+
+# (Optional) Ignore all models EXCEPT your master model
+*.zip
+!*master*.zip
+.venv/
