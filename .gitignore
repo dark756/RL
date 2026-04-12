@@ -3,3 +3,4 @@
 *.zip
 !*master*.zip
 .venv/
+*.pkl
