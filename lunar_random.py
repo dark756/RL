@@ -45,7 +45,7 @@ def run(n=0):
         re=0
         while not done:
             keys = pygame.key.get_pressed()
-            force_mag = 40.0
+            force_mag = 30.0
             lander = env.unwrapped.lander
             
             if keys[pygame.K_w]:
@@ -65,4 +65,3 @@ def run(n=0):
         print(reward)
 run()
 
-#to add: user input for motion->
