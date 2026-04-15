@@ -2,6 +2,7 @@ import gymnasium as gym
 import numpy as np
 from stable_baselines3 import SAC
 import time
+import pygame
 
 class ChaosPlanetWrapper(gym.Wrapper):
     def __init__(self, env):
@@ -32,8 +33,9 @@ def train():
     env.close()
 def run(n=0):
     models=["lunar/lunar_256/lunar_master_random"]
-    env=gym.make('LunarLander-v3',render_mode='human',gravity=-10, continuous=True,
-               enable_wind=True, wind_power=30.0, turbulence_power=2)
+    env=gym.make('LunarLander-v3',render_mode='human',gravity=-9, continuous=True,
+               enable_wind=True, wind_power=20.0, turbulence_power=1.8)
+    pygame.init()
     model=SAC.load(models[n])
     episodes=5
     for _ in range(episodes):
@@ -42,6 +44,18 @@ def run(n=0):
         env.render()
         re=0
         while not done:
+            keys = pygame.key.get_pressed()
+            force_mag = 40.0
+            lander = env.unwrapped.lander
+            
+            if keys[pygame.K_w]:
+                lander.ApplyForceToCenter((0, force_mag), True)
+            if keys[pygame.K_s]:
+                lander.ApplyForceToCenter((0, -force_mag), True)
+            if keys[pygame.K_a]:
+                lander.ApplyForceToCenter((-force_mag, 0), True)
+            if keys[pygame.K_d]:
+                lander.ApplyForceToCenter((force_mag, 0), True)
             action, _states=model.predict(obs, deterministic=True)
             new_obs, reward, te, tr, info=env.step(action)
             done=tr or te 
